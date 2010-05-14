@@ -1,0 +1,15 @@
+models\user_users:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                Entities\User
+    module:               users
+    prefix_path:          users
+    column:               id
+    with_wildcard_routes: true
+    model_methods:
+      object: getEditUserQb
+
+# default rules
+homepage:
+  url:   /
+  param: { module: users, action: index }

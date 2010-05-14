@@ -1,0 +1,160 @@
+# sfDoctrinePlugin 2.0
+
+## Installing
+
+You can install the plugin from SVN currently:
+
+    $ svn co http://svn.symfony-project.org/plugins/sfDoctrinePlugin/branches/1.3-2.0/ plugins/sfDoctrine2Plugin
+
+Now you just need to enable the plugin in your ProjectConfiguration:
+
+    [php]
+    class ProjectConfiguration extends sfProjectConfiguration
+    {
+      public function setup()
+      {
+        $this->enablePlugins('sfDoctrine2Plugin');
+      }
+    }
+
+## Configure Databases
+
+Sample `databases.yml` for MySQL:
+
+    [yml]
+    all:
+      doctrine:
+        class: sfDoctrineDatabase
+        param:
+          options:
+            driver: pdo_mysql
+            user: root
+            password:
+            dbname: doctrine
+
+Sample `databases.yml` for Sqlite:
+
+    [yml]
+    all:
+      doctrine:
+        class: sfDoctrineDatabase
+        param:
+          options:
+            driver: pdo_sqlite
+            path: %SF_DATA_DIR%/database.sqlite
+
+## Schema Files
+
+You can specify your schema files in `config/doctrine` just like normal. The schema syntax
+is slightly different from Doctrine 1. Below is an example:
+
+    [yml]
+    Entities\User:
+      type: entity
+      table: user
+      id:
+        id:
+          type: integer
+          generator:
+            strategy: AUTO
+      fields:
+        username:
+          type: string
+          length: 255
+        password:
+          type: string
+          length: 255
+
+## Custom Repository Class
+
+You can configure a custom repository class so you can add new methods for
+executing and retrieving queries.
+
+    [yml]
+    Entities\User:
+      type: entity
+      table: user
+      repositoryClass: UserRepository
+    # ...
+
+Now define a `UserRepository` class:
+
+    [php]
+    class UserRepository extends EntityRepository
+    {
+      public function getActiveUsers()
+      {
+        $qb = $this->createQueryBuilder('u');
+        $q = $qb->getQuery();
+
+        return $q->execute();
+      }
+    }
+
+Now you can use this method like the following:
+
+    [php]
+    $repository = $em->getRepository('Entities\User');
+    $users = $repository->getActiveUsers();
+
+If you utilize the `ActiveEntity` extension you can do the following:
+
+    [php]
+    $users = \Entities\User::getActiveUsers();
+
+In order to use the above syntax your `User` model needs to extend `sfDoctrineActiveEntity`
+like the following:
+
+    [php]
+    namespace Entities;
+
+    use sfDoctrineActiveEntity;
+
+    class User extends sfDoctrineActiveEntity
+    {
+      // ...
+    }
+
+## Data Fixtures
+
+YAML data fixtures no longer exist in Doctrine 2. Instead we just
+use regular PHP code to load our data fixtures.
+
+    [php]
+    // data/fixtures/fixtures.php
+
+    $em = $this->getEntityManager();
+
+    $admin = new \Entities\User();
+    $admin->username = 'admin';
+    $admin->password = 'changeme';
+
+The `$em` variable that is defined in the fixture files is the entity manager that
+will be used to persist the entities.
+
+## Building Doctrine
+
+Build models, forms, filters, database and load data fixtures.
+
+    $ php symfony doctrine:build --all --and-load
+
+## Updating Schema
+
+Updating your schema is just a matter of changing your mapping information in 
+`config/doctrine` and then running the following command:
+
+    $ php symfony doctrine:build --all-classes --and-update-schema
+
+## Entity Manager in Actions
+
+    [php]
+    class usersActions extends sfActions
+    {
+      public function executeIndex()
+      {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        // ...
+      }
+    }

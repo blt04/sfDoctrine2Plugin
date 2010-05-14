@@ -1,0 +1,18 @@
+all:
+  doctrine1:
+    class: sfDoctrineDatabase
+    param:
+      options:
+        driver: pdo_sqlite
+        path: %SF_DATA_DIR%/test1.sqlite
+  doctrine2:
+    class: sfDoctrineDatabase
+    param:
+      schema: %SF_CONFIG_DIR%/doctrine
+      plugins: ~
+      options:
+        #driver: pdo_sqlite
+        #path: %SF_DATA_DIR%/test2.sqlite
+        driver: pdo_mysql
+        user: root
+        dbname: sfdoctrine2

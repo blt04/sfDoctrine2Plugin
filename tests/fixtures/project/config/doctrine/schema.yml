@@ -1,0 +1,94 @@
+Entities\User:
+  type: entity
+  table: user
+  repositoryClass: UserRepository
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    isActive:
+      column: is_active
+      type: boolean
+    username:
+      type: string
+      length: 255
+    password:
+      type: string
+      length: 255
+    version:
+      type: integer
+      version: true
+  oneToOne:
+    profile:
+      targetEntity: Entities\Profile
+      mappedBy: user
+  manyToMany:
+    groups:
+      targetEntity: Entities\Group
+      joinTable:
+        name: user_group
+        joinColumns:
+          user_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          group_id:
+            referencedColumnName: id
+    friendsWithMe:
+      targetEntity: Entities\User
+      mappedBy: myFriends
+    myFriends:
+      targetEntity: Entities\User
+      joinTable:
+        name: friends
+        joinColumns:
+          user_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          friend_user_id:
+            referencedColumnName: id
+
+Entities\Profile:
+  type: entity
+  table: profile
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    firstName:
+      column: first_name
+      type: string
+      length: 255
+      notnull: true
+    lastName:
+      column: last_name
+      type: string
+      length: 255
+  oneToOne:
+    user:
+      targetEntity: Entities\User
+      joinColumn:
+        name: user_id
+        fieldName: userId
+        referencedColumnName: id
+        onDelete: CASCADE
+
+Entities\Group:
+  type: entity
+  table: groups
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: auto
+  fields:
+    name:
+      type: string
+      length: 255
+  manyToMany:
+    users:
+      targetEntity: Entities\User
+      mappedBy: groups
