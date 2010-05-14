@@ -36,14 +36,14 @@ class sfDoctrine2PluginConfiguration extends sfPluginConfiguration
       $this->dispatcher->connect('debug.web.load_panels', array('sfWebDebugPanelDoctrine', 'listenToAddPanelEvent'));
     }
 
-    require_once __DIR__.'/../lib/vendor/doctrine/Doctrine/Common/ClassLoader.php';
+    require_once __DIR__.'/../lib/vendor/doctrine/lib/Doctrine/Common/ClassLoader.php';
 
     $classLoader = new \Doctrine\Common\ClassLoader('DoctrineExtensions');
     $classLoader->setIncludePath(__DIR__.'/../lib/vendor/active_entity');
     $classLoader->register();
 
     $classLoader = new \Doctrine\Common\ClassLoader('Doctrine');
-    $classLoader->setIncludePath(__DIR__.'/../lib/vendor/doctrine');
+    $classLoader->setIncludePath(__DIR__.'/../lib/vendor/doctrine/lib');
     $classLoader->register();
 
     $classLoader = new \Doctrine\Common\ClassLoader('Symfony');
