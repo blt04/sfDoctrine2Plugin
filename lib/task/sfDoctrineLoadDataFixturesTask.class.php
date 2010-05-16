@@ -89,7 +89,7 @@ EOF;
           {
             $this->logSection('doctrine', sprintf('Truncating "%s"', $class->name));
             try {
-              $em->createQuery('DELETE FROM '.$class->name)->execute();
+              $em->createQuery(sprintf('DELETE FROM %s t',$class->name))->execute();
             } catch (Exception $e) {}
           }
         }
