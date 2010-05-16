@@ -47,7 +47,7 @@ class sfDoctrine2PluginConfiguration extends sfPluginConfiguration
     $classLoader->register();
 
     $classLoader = new \Doctrine\Common\ClassLoader('Symfony');
-    $classLoader->setIncludePath(__DIR__.'/../lib/vendor');
+    $classLoader->setIncludePath(__DIR__.'/../lib/vendor/doctrine/lib/vendor');
     $classLoader->register();
 
     $this->dispatcher->connect('component.method_not_found', array($this, 'componentMethodNotFound'));
