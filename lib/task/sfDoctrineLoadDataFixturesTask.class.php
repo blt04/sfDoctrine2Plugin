@@ -67,7 +67,7 @@ EOF;
           ->getDatabase($name)
           ->getEntityManager()
           ->getMetadataFactory()
-          ->getLoadedMetadata();
+          ->getAllMetadata();
 
         foreach ($metadatas as $metadata)
         {

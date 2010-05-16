@@ -647,7 +647,7 @@ class sfDoctrineFormGenerator extends sfGenerator
     foreach ($names as $name)
     {
       $em = $this->databaseManager->getDatabase($name)->getEntityManager();
-      foreach ($em->getMetadataFactory()->getLoadedMetadata() as $metadata)
+      foreach ($em->getMetadataFactory()->getAllMetadata() as $metadata)
       {
         if (!$metadata->isMappedSuperclass)
         {
