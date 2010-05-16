@@ -35,11 +35,11 @@ class Base<?php echo $this->formName ?>Form extends <?php echo $this->getFormCla
 <?php if (count($uniqueColumns) > 1): ?>
       new sfValidatorAnd(array(
 <?php foreach ($uniqueColumns as $uniqueColumn): ?>
-        new sfValidatorDoctrineUnique(array('model' => '<?php echo $this->table->getOption('name') ?>', 'column' => array('<?php echo implode("', '", $uniqueColumn) ?>'))),
+        new sfValidatorDoctrineUnique(array('model' => '<?php echo $this->modelName ?>', 'column' => array('<?php echo implode("', '", $uniqueColumn) ?>'))),
 <?php endforeach; ?>
       ))
 <?php else: ?>
-      new sfValidatorDoctrineUnique(array('model' => '<?php echo $this->table->getOption('name') ?>', 'column' => array('<?php echo implode("', '", $uniqueColumns[0]) ?>')))
+      new sfValidatorDoctrineUnique(array('model' => '<?php echo $this->modelName ?>', 'column' => array('<?php echo implode("', '", $uniqueColumns[0]) ?>')))
 <?php endif; ?>
     );
 
