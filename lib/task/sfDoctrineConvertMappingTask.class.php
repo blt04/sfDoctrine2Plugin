@@ -57,13 +57,21 @@ EOF;
 
     $em = $options['from'][0] == 'database' ? true:false;
 
-    $keys = array('from', 'to', 'dest', 'extend', 'num-spaces');
+    $opts = array('filter' => $options['from']);
+
+    $keys = array('filter', 'extend', 'num-spaces');
     if (isset($options['to']) && $options['to'] == 'annotation')
     {
-      $options['extend'] = 'sfDoctrineActiveEntity';
-      $options['num-spaces'] = 2;
+      $opts['extend'] = 'sfDoctrineActiveEntity';
+      $opts['num-spaces'] = 2;
     }
-    $args = $this->prepareDoctrineCliArguments($options, $keys);
+
+    $args = $this->prepareDoctrineCliArguments($opts, $keys);
+
+    // to-type
+    $args[] = $options['to'];
+    // dest-path
+    $args[] = $options['dest'];
 
     $this->callDoctrineCli('orm:convert-mapping', $args, $em);
   }

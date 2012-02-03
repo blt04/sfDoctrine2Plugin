@@ -123,13 +123,12 @@ class sfValidatorDoctrineUnique extends sfValidatorSchema
    */
   protected function isUpdate($object, $values)
   {
-    $primaryKeyVals = $this->em->getClassMetadata($this->getOption("model"))->getColumnValues($object, $this->getPrimaryKeys());
-    $primaryKeyValArray = array_combine($this->getPrimaryKeys(), $primaryKeyVals);
-
     // check each primary key column
     foreach ($this->getPrimaryKeys() as $column)
     {
-      if (!isset($values[$column]) ||  $primaryKeyValArray[$column] != $values[$column])
+      $value = $this->em->getClassMetadata($this->getOption("model"))->getFieldValue($object, $column);
+
+      if (!isset($values[$column]) ||  $value != $values[$column])
       {
         return false;
       }
